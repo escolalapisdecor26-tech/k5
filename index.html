@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relato Narrativo — Trilhas do Desenvolvimento · 5 anos</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #1B2A4A; --gold-light: #e8d9a0;
+  --teal: #0F6E56; --teal-bg: #E1F5EE; --teal-border: #5DCAA5;
+  --border: #e0ddd8; --bg: #f7f6f3; --surface: #ffffff;
+  --text: #1a1a1a; --muted: #6b6b6b; --hint: #9b9b9b;
+  --red: #c0392b; --red-bg: #fdf0ee;
+}
+body { font-family: Georgia,'Times New Roman',serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:16px; -webkit-text-size-adjust:100%; }
+.app { max-width:780px; margin:0 auto; padding:1.25rem 1rem 5rem; }
+.header { padding-bottom:1rem; border-bottom:1px solid var(--border); margin-bottom:1.25rem; }
+.badge { display:inline-block; background:var(--teal-bg); color:var(--teal); font-family:system-ui,sans-serif; font-size:11px; font-weight:600; padding:3px 12px; border-radius:99px; border:1px solid var(--teal-border); margin-bottom:8px; letter-spacing:.05em; }
+.header h1 { font-size:20px; font-weight:400; color:var(--navy); line-height:1.3; }
+.header p { font-size:13px; color:var(--muted); margin-top:4px; font-family:system-ui,sans-serif; }
+.aluno-grid { display:grid; grid-template-columns:1fr; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:1rem; margin-bottom:1rem; }
+.field-lbl { font-family:system-ui,sans-serif; font-size:10px; font-weight:700; color:var(--hint); text-transform:uppercase; letter-spacing:.07em; margin-bottom:5px; }
+.aluno-grid input, .aluno-grid select { width:100%; font-family:system-ui,sans-serif; font-size:16px; padding:10px 12px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); appearance:none; -webkit-appearance:none; }
+.aluno-grid input:focus, .aluno-grid select:focus { outline:none; border-color:var(--navy); }
+.sexo-row { display:flex; gap:10px; }
+.sexo-btn { flex:1; font-family:system-ui,sans-serif; font-size:14px; padding:10px; border-radius:8px; border:1.5px solid var(--border); background:var(--bg); color:var(--muted); cursor:pointer; text-align:center; transition:all .15s; -webkit-tap-highlight-color:transparent; }
+.sexo-btn.ativo { border-color:var(--navy); background:var(--navy); color:var(--gold-light); font-weight:600; }
+.prog-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--surface); border:1px solid var(--border); border-radius:8px; margin-bottom:1rem; }
+.prog-track { flex:1; height:6px; background:var(--border); border-radius:99px; overflow:hidden; }
+.prog-fill { height:100%; background:var(--navy); border-radius:99px; width:0%; transition:width .3s ease; }
+.prog-lbl { font-family:system-ui,sans-serif; font-size:12px; color:var(--muted); min-width:50px; text-align:right; white-space:nowrap; }
+.tabs-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:1rem; padding-bottom:4px; }
+.tabs-scroll::-webkit-scrollbar { display:none; }
+.tabs-row { display:flex; gap:6px; width:max-content; }
+.tab-btn { font-family:system-ui,sans-serif; font-size:13px; padding:8px 16px; border-radius:99px; border:1px solid var(--border); background:var(--surface); color:var(--muted); cursor:pointer; white-space:nowrap; min-height:36px; -webkit-tap-highlight-color:transparent; }
+.tab-btn.ativa { background:var(--navy); color:var(--gold-light); border-color:var(--navy); }
+.domain-section { display:none; }
+.domain-section.vis { display:block; animation:fadein .15s ease; }
+@keyframes fadein { from{opacity:0} to{opacity:1} }
+.domain-titulo { font-family:system-ui,sans-serif; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.sub-lbl { font-family:system-ui,sans-serif; font-size:12px; color:var(--hint); font-style:italic; margin:14px 0 6px; }
+.item-row { display:flex; align-items:flex-start; gap:12px; padding:11px 6px; border-bottom:1px solid #f0ede8; cursor:pointer; border-radius:6px; -webkit-tap-highlight-color:transparent; }
+.item-row:last-child { border-bottom:none; }
+.item-row:active { background:#f0ede8; }
+.item-row input[type=checkbox] { margin-top:2px; flex-shrink:0; width:20px; height:20px; accent-color:var(--navy); cursor:pointer; }
+.item-row label { font-family:system-ui,sans-serif; font-size:14px; color:var(--text); line-height:1.55; cursor:pointer; }
+.item-row.marcado label { color:var(--hint); text-decoration:line-through; }
+.sep { border:none; border-top:1px solid var(--border); margin:1.75rem 0 1.25rem; }
+.sec-titulo { font-size:16px; font-weight:400; color:var(--navy); margin-bottom:4px; }
+.sec-hint { font-family:system-ui,sans-serif; font-size:13px; color:var(--hint); margin-bottom:10px; }
+.obs-area { width:100%; min-height:90px; font-family:system-ui,sans-serif; font-size:16px; padding:12px; border-radius:8px; border:1px solid var(--border); background:var(--surface); color:var(--text); resize:vertical; line-height:1.6; margin-bottom:14px; }
+.obs-area:focus { outline:none; border-color:var(--navy); }
+.btn-row { display:flex; flex-direction:column; gap:10px; }
+.btn-gerar { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:var(--navy); color:var(--gold-light); font-family:system-ui,sans-serif; font-size:15px; font-weight:600; padding:14px 22px; border-radius:10px; border:none; cursor:pointer; min-height:50px; -webkit-tap-highlight-color:transparent; }
+.btn-gerar:active { opacity:.85; }
+.btn-sec { width:100%; display:flex; align-items:center; justify-content:center; gap:6px; font-family:system-ui,sans-serif; font-size:14px; padding:12px 16px; border-radius:10px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; min-height:46px; -webkit-tap-highlight-color:transparent; }
+.btn-sec:active { background:#f0ede8; }
+.erro-box { margin-top:12px; padding:12px 14px; background:var(--red-bg); border:1px solid #f5c6c0; border-radius:8px; font-family:system-ui,sans-serif; font-size:14px; color:var(--red); display:none; }
+.relato-box { margin-top:1.5rem; background:var(--surface); border-radius:10px; border:1px solid var(--border); padding:1.25rem; }
+.relato-hdr { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border); gap:8px; }
+.relato-etiq { font-family:system-ui,sans-serif; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); }
+.btn-copiar { font-family:system-ui,sans-serif; font-size:13px; font-weight:600; padding:8px 18px; border-radius:99px; border:1px solid var(--navy); background:var(--navy); color:var(--gold-light); cursor:pointer; white-space:nowrap; min-height:36px; -webkit-tap-highlight-color:transparent; }
+.btn-copiar.ok { background:var(--teal-bg); color:var(--teal); border-color:var(--teal-border); }
+.relato-txt { font-size:15px; line-height:1.9; color:var(--text); white-space:pre-wrap; }
+@media(min-width:600px){
+  .app{padding:2rem 1.5rem 4rem;}
+  .aluno-grid{grid-template-columns:2fr 1fr 1fr 1fr;}
+  .tabs-scroll{overflow-x:visible;}
+  .tabs-row{width:auto;flex-wrap:wrap;}
+  .tab-btn{font-size:12px;padding:5px 13px;min-height:auto;}
+  .btn-row{flex-direction:row;}
+  .btn-gerar{width:auto;min-height:auto;padding:10px 22px;font-size:13px;}
+  .btn-sec{width:auto;min-height:auto;padding:9px 16px;font-size:13px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="badge">Trilhas do Desenvolvimento · 5 anos</div>
+    <h1>Relato Narrativo do Portfólio</h1>
+    <p>Escola Projeto Lápis de Cor · Educação Infantil</p>
+  </div>
+
+  <div class="aluno-grid">
+    <div>
+      <div class="field-lbl">Nome do aluno</div>
+      <input id="f-nome" type="text" placeholder="Nome completo">
+    </div>
+    <div>
+      <div class="field-lbl">Sexo</div>
+      <div class="sexo-row">
+        <div class="sexo-btn ativo" id="sexo-f" onclick="setSexo('F')">♀ Menina</div>
+        <div class="sexo-btn" id="sexo-m" onclick="setSexo('M')">♂ Menino</div>
+      </div>
+    </div>
+    <div>
+      <div class="field-lbl">Professora</div>
+      <input id="f-prof" type="text" placeholder="Nome da professora">
+    </div>
+    <div>
+      <div class="field-lbl">Trimestre</div>
+      <select id="f-periodo">
+        <option value="1º trimestre">1º trimestre</option>
+        <option value="2º trimestre">2º trimestre</option>
+        <option value="3º trimestre">3º trimestre</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="prog-bar">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <div class="prog-track"><div class="prog-fill" id="pfill"></div></div>
+    <span class="prog-lbl" id="plbl">0 / 0</span>
+  </div>
+
+  <div class="tabs-scroll"><div class="tabs-row" id="tabs-row"></div></div>
+  <div id="domains-wrap"></div>
+
+  <hr class="sep">
+  <h2 class="sec-titulo">Observações complementares</h2>
+  <p class="sec-hint">Acrescente observações livres que enriquecem o relato (opcional).</p>
+  <textarea class="obs-area" id="obs" placeholder="Ex.: Demonstra grande interesse por histórias, adora explorar a área externa..."></textarea>
+  <div class="btn-row">
+    <button class="btn-gerar" onclick="gerarRelato()">✦ Gerar relato narrativo</button>
+    <button class="btn-sec" onclick="limpar()">↺ Limpar tudo</button>
+  </div>
+  <div class="erro-box" id="erro-box"></div>
+
+  <div id="relato-box" style="display:none" class="relato-box">
+    <div class="relato-hdr">
+      <span class="relato-etiq">Relato gerado</span>
+      <button class="btn-copiar" id="btn-cp" onclick="copiar()">Copiar texto</button>
+    </div>
+    <div class="relato-txt" id="relato-txt"></div>
+  </div>
+</div>
+
+<script>
+// ─── GÊNERO ──────────────────────────────────────────────────────────────────
+let SEXO = 'F';
+
+function setSexo(s) {
+  SEXO = s;
+  document.getElementById('sexo-f').classList.toggle('ativo', s==='F');
+  document.getElementById('sexo-m').classList.toggle('ativo', s==='M');
+}
+
+function aplicarGenero(txt, sexo) {
+  const M = sexo === 'M';
+  const i = M ? 0 : 1;
+  txt = txt.replace(/{O\/A}/g,                  ['O','A'][i]);
+  txt = txt.replace(/{o\/a}/g,                  ['o','a'][i]);
+  txt = txt.replace(/{Ele\/Ela}/g,              ['Ele','Ela'][i]);
+  txt = txt.replace(/{ele\/ela}/g,              ['ele','ela'][i]);
+  txt = txt.replace(/{do\/da}/g,               ['do','da'][i]);
+  txt = txt.replace(/{no\/na}/g,               ['no','na'][i]);
+  txt = txt.replace(/{ao\/à}/g,                ['ao','à'][i]);
+  txt = txt.replace(/{um\/uma}/g,              ['um','uma'][i]);
+  txt = txt.replace(/{seu\/sua}/g,             ['seu','sua'][i]);
+  txt = txt.replace(/{seus\/suas}/g,           ['seus','suas'][i]);
+  txt = txt.replace(/{dele\/dela}/g,           ['dele','dela'][i]);
+  txt = txt.replace(/{proprio\/propria}/g,     ['próprio','própria'][i]);
+  txt = txt.replace(/{mesmo\/mesma}/g,         ['mesmo','mesma'][i]);
+  txt = txt.replace(/{sozinho\/sozinha}/g,     ['sozinho','sozinha'][i]);
+  txt = txt.replace(/{contrariado\/contrariada}/g, ['contrariado','contrariada'][i]);
+  txt = txt.replace(/{molhado\/molhada}/g,     ['molhado','molhada'][i]);
+  txt = txt.replace(/{satisfeito\/satisfeita}/g,['satisfeito','satisfeita'][i]);
+  txt = txt.replace(/{engajado\/engajada}/g,   ['engajado','engajada'][i]);
+  txt = txt.replace(/{seguro\/segura}/g,       ['seguro','segura'][i]);
+  txt = txt.replace(/{ativo\/ativa}/g,         ['ativo','ativa'][i]);
+  txt = txt.replace(/{curioso\/curiosa}/g,     ['curioso','curiosa'][i]);
+  txt = txt.replace(/{aluno\/aluna}/g,         ['aluno','aluna'][i]);
+  txt = txt.replace(/{pronto\/pronta}/g,       ['pronto','pronta'][i]);
+  txt = txt.replace(/{independente}/g,         'independente');
+  txt = txt.replace(/{sua\/sua}/g,             ['seu','sua'][i]);
+  txt = txt.replace(/{suas}/g,                 'suas');
+  txt = txt.replace(/{sua}/g,                  'sua');
+  txt = txt.replace(/\{[^}]+\}/g, '');
+  return txt;
+}
+
+const DOMINIOS = [
+  { label: "Socioemocional", grupos: [
+    { sub: "Expressão emocional e autorregulação", itens: [
+      "Nomeia emoções com maior precisão e as relaciona a situações específicas",
+      "Demonstra autocontrole crescente diante de frustrações",
+      "Utiliza estratégias de regulação (respirar, pedir ajuda, afastar-se, verbalizar)",
+      "Mostra orgulho de suas produções e conquistas",
+      "Recupera-se mais rapidamente após conflitos",
+      "Tolera melhor a espera e mudanças de planos",
+      "Assume responsabilidades simples em grupo"
+    ]},
+    { sub: "Relacionamento interpessoal", itens: [
+      "Negocia regras e papéis com mais autonomia",
+      "Demonstra empatia identificando necessidades e sentimentos dos colegas",
+      "Participa de grupos maiores com cooperação",
+      "Toma iniciativa para ajudar e incluir colegas",
+      "Resolve conflitos com pouca mediação",
+      "Mantém amizades significativas e estáveis",
+      "Expressa preferências sociais com clareza"
+    ]}
+  ]},
+  { label: "Funções Executivas", grupos: [
+    { sub: "Autorregulação e planejamento", itens: [
+      "Mantém foco em propostas por 20 a 25 minutos",
+      "Segue instruções complexas com 3 a 4 etapas",
+      "Planeja ações antes de executá-las (primeiro vou… depois…)",
+      "Alterna estratégias quando encontra dificuldades",
+      "Inicia atividades sem depender do adulto",
+      "Finaliza tarefas com mais persistência",
+      "Organiza materiais com autonomia crescente",
+      "Controla impulsos com mais facilidade"
+    ]}
+  ]},
+  { label: "Linguagem", grupos: [
+    { sub: "Linguagem oral avançada", itens: [
+      "Conta histórias completas com estrutura coerente",
+      "Usa tempos verbais com mais precisão (passado, presente, futuro)",
+      "Explica ideias de forma detalhada e argumenta",
+      "Faz perguntas investigativas (e se…?, como funciona…?)",
+      "Participa ativamente de rodas, comentando e escutando",
+      "Usa conectores com naturalidade (porque, então, depois, mas)",
+      "Reconta histórias com clareza e sequência lógica"
+    ]},
+    { sub: "Comunicação social", itens: [
+      "Mantém diálogos prolongados com turnos adequados",
+      "Descreve acontecimentos vividos com organização temporal",
+      "Faz inferências sobre histórias, imagens e situações",
+      "Utiliza vocabulário amplo e variado"
+    ]}
+  ]},
+  { label: "Alfabetização Emergente", grupos: [
+    { sub: "Alfabetização emergente — não formal (sem ensino formal, apenas emergente e espontâneo)", itens: [
+      "Reconhece seu nome e outros nomes do ambiente",
+      "Identifica letras do nome e compara com outras palavras",
+      "Diferencia tipos de texto (lista, rótulo, título, história)",
+      "Produz hipóteses iniciais de escrita (pré-silábica / silábica emergente)",
+      "Segmenta oralmente palavras em sílabas com apoio",
+      "Lê textos conhecidos apoiando-se em padrões e memórias",
+      "Utiliza escrita espontânea em brincadeiras (listas, bilhetes, placas)",
+      "Demonstra consciência fonológica inicial (rimas, sons iniciais)"
+    ]}
+  ]},
+  { label: "Cognitivo", grupos: [
+    { sub: "Pensamento lógico (BNCC)", itens: [
+      "Classifica por múltiplos critérios (cor, forma, tamanho, função)",
+      "Ordena séries (maior→menor, mais claro→mais escuro, maior→menor quantidade)",
+      "Compara quantidades com justificativa (esse tem mais porque…)",
+      "Identifica formas geométricas diversas e descreve características",
+      "Reconhece e cria padrões (AB, ABC, AAB)",
+      "Resolve problemas concretos com raciocínio próprio",
+      "Observa relações de causa e efeito em experimentos e situações",
+      "Faz antecipações (acho que vai acontecer…)"
+    ]}
+  ]},
+  { label: "Curiosidade Investigativa", grupos: [
+    { sub: "Investigação e experimentação", itens: [
+      "Faz perguntas sobre fenômenos naturais, corpo, objetos e funcionamento",
+      "Observa, compara e relata descobertas",
+      "Testa hipóteses e verifica resultados",
+      "Demonstra interesse por natureza, animais, clima e transformações",
+      "Participa de investigações e projetos com envolvimento",
+      "Conecta informações novas com conhecimentos prévios"
+    ]}
+  ]},
+  { label: "Brincadeira Simbólica", grupos: [
+    { sub: "Brincadeira simbólica avançada", itens: [
+      "Cria narrativas longas e elaboradas durante a brincadeira",
+      "Assume papéis sociais variados com consistência",
+      "Utiliza diálogos complexos nos enredos",
+      "Integra múltiplos colegas em histórias colaborativas",
+      "Representa cenas do cotidiano, da imaginação e de histórias conhecidas",
+      "Planeja a estrutura do brincar antes de começar",
+      "Usa objetos substitutos com criatividade e intenção"
+    ]}
+  ]},
+  { label: "Motor", grupos: [
+    { sub: "Motricidade global", itens: [
+      "Coordena movimentos com fluidez",
+      "Alterna pés ao correr, saltar e subir escadas",
+      "Salta distâncias com precisão e impulso",
+      "Mantém equilíbrio em bases estreitas",
+      "Arremessa e recebe bolas com direção e força ajustadas",
+      "Realiza movimentos rítmicos e sequências motoras simples"
+    ]},
+    { sub: "Motricidade fina", itens: [
+      "Usa lápis com controle refinado",
+      "Desenha figuras humanas com múltiplos detalhes",
+      "Recorta curvas e formas complexas",
+      "Faz dobraduras simples",
+      "Monta construções elaboradas com blocos",
+      "Realiza rasgagens com precisão",
+      "Escreve marcas gráficas intencionais e organizadas"
+    ]}
+  ]},
+  { label: "Expressão Artística", grupos: [
+    { sub: "Criatividade e expressão", itens: [
+      "Representa cenas conhecidas com riqueza de detalhes",
+      "Mistura cores com intenção estética",
+      "Cria composições com múltiplos elementos",
+      "Usa música e ritmo com segurança",
+      "Inventa rimas e melodias",
+      "Participa de dramatizações com envolvimento",
+      "Expõe e comenta suas produções com clareza",
+      "Mostra apreciação estética ao observar obras, cores e materiais"
+    ]}
+  ]},
+  { label: "Temporal/Espacial", grupos: [
+    { sub: "Temporal", itens: [
+      "Usa adequadamente ontem/hoje/amanhã",
+      "Compreende sequência de rotinas e acontecimentos",
+      "Relaciona eventos a períodos (manhã, tarde, noite)",
+      "Reconhece passagem do tempo em projetos e eventos",
+      "Usa expressões como no verão passado, no próximo, ontem à noite"
+    ]},
+    { sub: "Espacial", itens: [
+      "Descreve caminhos e localizações",
+      "Usa termos espaciais com precisão",
+      "Organiza materiais no espaço com planejamento",
+      "Representa lugares já conhecidos nos desenhos"
+    ]}
+  ]},
+  { label: "Autonomia", grupos: [
+    { sub: "Autonomia pessoal", itens: [
+      "Veste-se e despe-se com independência",
+      "Identifica frente e costas das roupas",
+      "Cuida de seus pertences",
+      "Busca o banheiro e realiza higiene com mínima ajuda",
+      "Organiza sua mochila com apoio verbal leve"
+    ]},
+    { sub: "Alimentação", itens: [
+      "Alimenta-se com autonomia plena",
+      "Serve-se (quando permitido)",
+      "Mantém postura adequada durante a refeição",
+      "Experimenta novos alimentos com maior abertura"
+    ]},
+    { sub: "Higiene", itens: [
+      "Lava mãos, rosto e dentes com autonomia crescente",
+      "Realiza higiene íntima com supervisão leve",
+      "Banha-se com independência parcial"
+    ]},
+    { sub: "Sono", itens: [
+      "Relata sonhos com clareza",
+      "Adota rituais pessoais de relaxamento",
+      "Demonstra consciência de cansaço e necessidade de repouso"
+    ]}
+  ]},
+  { label: "Conduta Escolar", grupos: [
+    { sub: "Relação com o ambiente escolar", itens: [
+      "Participa das atividades com intencionalidade",
+      "Contribui nas rodas e debates",
+      "Segue regras e combinados do grupo",
+      "Organiza seus materiais e espaço de trabalho",
+      "Demonstra responsabilidade nas propostas",
+      "Interage positivamente com colegas e professores",
+      "Mostra curiosidade e iniciativa em projetos"
+    ]}
+  ]}
+];
+
+const FRASES = {
+  // SOCIOEMOCIONAL – Expressão emocional
+  "Nomeia emoções com maior precisão e as relaciona a situações específicas": [
+    "{N} nomeia {suas} emoções com precisão crescente e as relaciona às situações que as provocaram, revelando desenvolvimento expressivo da inteligência emocional.",
+    "A consciência emocional de {N} avança: {ele/ela} identifica o que sente e explica por quê, conquistando um vocabulário afetivo que transforma a convivência."
+  ],
+  "Demonstra autocontrole crescente diante de frustrações": [
+    "{N} demonstra autocontrole crescente diante de frustrações, gerenciando {suas} reações com mais deliberação e maturidade do que em períodos anteriores.",
+    "O autocontrole de {N} é visível e consistente: {ele/ela} lida com os limites e decepções com mais equilíbrio, revelando maturidade executiva e afetiva."
+  ],
+  "Utiliza estratégias de regulação (respirar, pedir ajuda, afastar-se, verbalizar)": [
+    "{N} recorre a estratégias de regulação com autonomia — respirar, pedir ajuda, afastar-se, verbalizar — revelando autorregulação emocional em nível significativo.",
+    "A capacidade de {N} de se regular com estratégias próprias é uma conquista expressiva: {ele/ela} escolhe e aplica recursos de equilíbrio com crescente eficácia."
+  ],
+  "Mostra orgulho de suas produções e conquistas": [
+    "{N} demonstra orgulho genuíno por {suas} produções e conquistas, celebrando com expressividade e buscando o reconhecimento — autoestima saudável em consolidação.",
+    "O orgulho de {N} ao realizar algo é contagiante e legítimo: {ele/ela} celebra {suas} realizações com alegria, revelando autoconfiança e identidade em expansão."
+  ],
+  "Recupera-se mais rapidamente após conflitos": [
+    "{N} recupera-se de conflitos com mais rapidez e leveza, revelando resiliência emocional e capacidade crescente de retomar o equilíbrio e as relações.",
+    "A recuperação emocional de {N} após momentos difíceis avança visivelmente: {ele/ela} retoma o equilíbrio com agilidade, demonstrando maturidade afetiva."
+  ],
+  "Tolera melhor a espera e mudanças de planos": [
+    "{N} tolera melhor a espera e as mudanças de planos, revelando desenvolvimento da flexibilidade cognitiva e da autorregulação comportamental.",
+    "A tolerância de {N} à espera e às mudanças avança: {ele/ela} lida com o inesperado com mais equanimidade, demonstrando maturidade executiva."
+  ],
+  "Assume responsabilidades simples em grupo": [
+    "{N} assume responsabilidades simples em grupo com disposição e senso de pertencimento, revelando desenvolvimento moral e consciência coletiva.",
+    "A responsabilidade coletiva emerge em {N}: {ele/ela} cuida das tarefas assumidas com comprometimento, revelando senso de pertencimento ao grupo."
+  ],
+  // SOCIOEMOCIONAL – Relações
+  "Negocia regras e papéis com mais autonomia": [
+    "{N} negocia regras e papéis com mais autonomia, revelando sofisticação social, linguística e cognitiva integradas de forma expressiva.",
+    "A autonomia de {N} nas negociações sociais é consistente: {ele/ela} propõe, argumenta e acorda com os pares com crescente independência do adulto."
+  ],
+  "Demonstra empatia identificando necessidades e sentimentos dos colegas": [
+    "{N} identifica as necessidades e sentimentos dos colegas com sensibilidade genuína, respondendo com empatia e cuidado — desenvolvimento afetivo de grande qualidade.",
+    "A empatia de {N} se manifesta na atenção ativa ao outro: {ele/ela} percebe, nomeia e responde aos sentimentos dos pares com ternura e pertinência."
+  ],
+  "Participa de grupos maiores com cooperação": [
+    "{N} participa de grupos maiores com cooperação e contribuição ativa, revelando desenvolvimento das competências sociais e prazer na convivência coletiva.",
+    "A cooperação de {N} em grupos maiores é expressiva: {ele/ela} contribui, escuta e compartilha, demonstrando maturidade social em expansão."
+  ],
+  "Toma iniciativa para ajudar e incluir colegas": [
+    "{N} toma iniciativa para ajudar e incluir colegas com generosidade e sensibilidade, revelando empatia ativa e senso de responsabilidade social.",
+    "A generosidade de {N} com os pares é uma marca afetiva consistente: {ele/ela} ajuda e inclui com iniciativa própria, revelando altruísmo em desenvolvimento."
+  ],
+  "Resolve conflitos com pouca mediação": [
+    "{N} resolve conflitos com pouca mediação do adulto, revelando autonomia social consolidada e capacidade eficaz de negociação e resolução.",
+    "A autonomia de {N} na resolução de conflitos está consolidada: {ele/ela} encontra caminhos próprios com palavras e disposição, com intervenção mínima."
+  ],
+  "Mantém amizades significativas e estáveis": [
+    "{N} mantém amizades significativas e estáveis, revelando capacidade de reciprocidade, fidelidade relacional e desenvolvimento afetivo consolidado.",
+    "As amizades de {N} são profundas e consistentes — {ele/ela} cuida, sustenta e nutre vínculos com atenção e constância, demonstrando maturidade social."
+  ],
+  "Expressa preferências sociais com clareza": [
+    "{N} expressa {suas} preferências sociais com clareza e assertividade, revelando identidade relacional definida e comunicação eficaz.",
+    "A clareza de {N} sobre {suas} preferências sociais revela identidade e autonomia: {ele/ela} sabe com quem quer estar e o expressa com segurança."
+  ],
+  // FUNÇÕES EXECUTIVAS
+  "Mantém foco em propostas por 20 a 25 minutos": [
+    "{N} mantém o foco em propostas por 20 a 25 minutos, revelando maturidade neurológica e qualidade de engajamento expressivas para a faixa etária.",
+    "A janela de atenção de {N} alcança 20 a 25 minutos em atividades significativas — desenvolvimento notável das funções executivas."
+  ],
+  "Segue instruções complexas com 3 a 4 etapas": [
+    "{N} segue instruções de três a quatro etapas com consistência e precisão, revelando desenvolvimento robusto da memória de trabalho e da atenção sustentada.",
+    "Instruções de até quatro etapas são executadas por {N} com segurança crescente, sinalizando funções executivas em nível avançado."
+  ],
+  "Planeja ações antes de executá-las (primeiro vou… depois…)": [
+    "{N} planeja {suas} ações antes de executá-las — \"primeiro vou… depois…\" — revelando pensamento prospectivo e maturidade executiva consolidada.",
+    "O planejamento de {N} é claro e sistemático: {ele/ela} organiza etapas antes de agir, demonstrando cognição executiva de alto nível."
+  ],
+  "Alterna estratégias quando encontra dificuldades": [
+    "{N} alterna estratégias com flexibilidade quando encontra dificuldades, revelando resiliência cognitiva e capacidade de aprendizagem pela experiência.",
+    "Quando algo não funciona, {N} busca outra abordagem com disposição — flexibilidade que revela pensamento criativo e maturidade executiva."
+  ],
+  "Inicia atividades sem depender do adulto": [
+    "{N} inicia atividades com independência crescente, revelando confiança nas próprias capacidades e autonomia executiva em consolidação.",
+    "A independência de {N} ao iniciar tarefas está consolidada: {ele/ela} parte para a ação com iniciativa e segurança, sem necessitar de mediação constante."
+  ],
+  "Finaliza tarefas com mais persistência": [
+    "{N} finaliza tarefas com persistência e determinação, revelando desenvolvimento da regulação emocional e cognitiva a serviço da aprendizagem.",
+    "A persistência de {N} na conclusão de tarefas é uma conquista expressiva: {ele/ela} sustenta o esforço até o fim com disposição e foco."
+  ],
+  "Organiza materiais com autonomia crescente": [
+    "{N} organiza {seus/suas} materiais com autonomia crescente, revelando desenvolvimento do planejamento, do senso de ordem e da responsabilidade.",
+    "A organização dos materiais é uma prática que {N} incorpora com disposição e responsabilidade, revelando autonomia na gestão do próprio espaço."
+  ],
+  "Controla impulsos com mais facilidade": [
+    "{N} controla {seus/suas} impulsos com mais facilidade, revelando maturidade da autorregulação comportamental e desenvolvimento das funções executivas.",
+    "O controle de impulsos de {N} avança de forma consistente: {ele/ela} para, pensa e age com mais deliberação, revelando amadurecimento executivo expressivo."
+  ],
+  // LINGUAGEM – Oral avançada
+  "Conta histórias completas com estrutura coerente": [
+    "{N} conta histórias completas com estrutura coerente — começo, desenvolvimento e desfecho — revelando domínio linguístico e narrativo integrados.",
+    "As histórias de {N} têm estrutura clara e conteúdo rico, demonstrando pensamento narrativo, memória e linguagem plenamente articulados."
+  ],
+  "Usa tempos verbais com mais precisão (passado, presente, futuro)": [
+    "{N} usa os tempos verbais com mais precisão — passado, presente e futuro — revelando desenvolvimento gramatical sofisticado e domínio da língua.",
+    "A precisão verbal de {N} avança: {ele/ela} flexiona os verbos com propriedade, revelando internalização das estruturas gramaticais da língua portuguesa."
+  ],
+  "Explica ideias de forma detalhada e argumenta": [
+    "{N} explica {suas} ideias com detalhes e argumenta com clareza, revelando pensamento crítico, linguagem sofisticada e identidade intelectual em consolidação.",
+    "A argumentação de {N} é elaborada e precisa: {ele/ela} desenvolve ideias com riqueza vocabular e lógica, demonstrando maturidade linguística e cognitiva."
+  ],
+  "Faz perguntas investigativas (e se…?, como funciona…?)": [
+    "Perguntas investigativas — \"e se…?\", \"como funciona…?\" — são frequentes em {N}, revelando pensamento hipotético, curiosidade científica e uso sofisticado da linguagem.",
+    "{N} interroga o mundo com profundidade e criatividade: {suas} perguntas revelam raciocínio hipotético e desejo genuíno de compreender."
+  ],
+  "Participa ativamente de rodas, comentando e escutando": [
+    "{N} participa das rodas com presença ativa — comenta, questiona e escuta com atenção genuína — revelando maturidade dialógica e social.",
+    "As rodas são espaço de protagonismo pleno para {N}: {ele/ela} contribui, escuta e dialoga com qualidade, revelando maturidade linguística e social."
+  ],
+  "Usa conectores com naturalidade (porque, então, depois, mas)": [
+    "{N} usa conectores lógicos com naturalidade, revelando que a linguagem organiza o pensamento com relações causais, temporais e contrastivas de forma fluida.",
+    "O uso de conectores por {N} revela sofisticação linguística: {ele/ela} conecta ideias com lógica e precisão, expressando raciocínio complexo pela fala."
+  ],
+  "Reconta histórias com clareza e sequência lógica": [
+    "{N} reconta histórias com clareza e sequência lógica, revelando memória narrativa, compreensão textual e domínio da estrutura narrativa.",
+    "O reconto de {N} é fluido e coerente: {ele/ela} recupera personagens, ações e sequências com precisão e riqueza de detalhes."
+  ],
+  // LINGUAGEM – Comunicação social
+  "Mantém diálogos prolongados com turnos adequados": [
+    "{N} mantém diálogos prolongados com turnos adequados, revelando atenção ao interlocutor, compreensão social e prazer genuíno na troca.",
+    "A capacidade dialógica de {N} está consolidada: {ele/ela} sustenta conversas longas, escuta, responde e contribui com propriedade e interesse."
+  ],
+  "Descreve acontecimentos vividos com organização temporal": [
+    "{N} descreve acontecimentos vividos com organização temporal clara, revelando memória episódica, desenvolvimento narrativo e domínio linguístico articulados.",
+    "A descrição de {N} sobre o que viveu é organizada e precisa: {ele/ela} narra com sequência lógica, revelando pensamento temporal e linguístico integrados."
+  ],
+  "Faz inferências sobre histórias, imagens e situações": [
+    "{N} faz inferências sobre histórias, imagens e situações com desenvoltura, revelando pensamento crítico, compreensão leitora e cognição sofisticada.",
+    "A capacidade inferencial de {N} é expressiva: {ele/ela} vai além do óbvio, deduzindo, antecipando e interpretando com criatividade e lógica."
+  ],
+  "Utiliza vocabulário amplo e variado": [
+    "{N} utiliza vocabulário amplo e variado nas interações cotidianas, revelando desenvolvimento lexical sofisticado e riqueza expressiva.",
+    "O vocabulário de {N} é amplo e preciso: {ele/ela} escolhe as palavras certas para cada situação, demonstrando domínio linguístico em expansão."
+  ],
+  // ALFABETIZAÇÃO EMERGENTE
+  "Reconhece seu nome e outros nomes do ambiente": [
+    "{N} reconhece {seu/sua} nome e outros nomes presentes no ambiente com segurança, revelando consciência gráfica e função social da escrita consolidadas.",
+    "O reconhecimento de nomes escritos no ambiente é uma habilidade de {N}: {ele/ela} identifica com precisão, revelando letramento emergente ativo."
+  ],
+  "Identifica letras do nome e compara com outras palavras": [
+    "{N} identifica letras de {seu/sua} nome e as compara com outras palavras, revelando desenvolvimento da consciência grafémica e do pensamento analítico sobre a escrita.",
+    "A comparação entre letras do nome e outras palavras revela em {N} pensamento analítico sobre a escrita — base fundamental da alfabetização."
+  ],
+  "Diferencia tipos de texto (lista, rótulo, título, história)": [
+    "{N} diferencia tipos de texto — lista, rótulo, título, história — com clareza, revelando compreensão sofisticada das funções sociais da escrita.",
+    "A distinção entre tipos de texto é uma conquista de {N}: {ele/ela} reconhece para que serve cada um, revelando letramento emergente avançado."
+  ],
+  "Produz hipóteses iniciais de escrita (pré-silábica / silábica emergente)": [
+    "{N} produz hipóteses iniciais de escrita — pré-silábica ou silábica emergente — revelando processo ativo de construção do sistema de escrita.",
+    "As hipóteses de escrita de {N} revelam um pensamento em construção: {ele/ela} escreve com intenção e lógica própria, demonstrando processo de alfabetização."
+  ],
+  "Segmenta oralmente palavras em sílabas com apoio": [
+    "{N} segmenta palavras em sílabas oralmente com apoio, revelando desenvolvimento da consciência fonológica — base essencial para a alfabetização.",
+    "A segmentação silábica emerge em {N} com apoio: {ele/ela} divide palavras com atenção ao som, revelando consciência fonológica em desenvolvimento."
+  ],
+  "Lê textos conhecidos apoiando-se em padrões e memórias": [
+    "{N} lê textos conhecidos apoiando-se em padrões visuais e na memória, revelando estratégias de leitura emergente e prazer pelo texto.",
+    "A leitura de {N} em textos familiares é fluida e prazerosa: {ele/ela} usa padrões e memória para construir sentido, demonstrando letramento emergente."
+  ],
+  "Utiliza escrita espontânea em brincadeiras (listas, bilhetes, placas)": [
+    "{N} usa a escrita espontaneamente nas brincadeiras — listas, bilhetes, placas — revelando compreensão da escrita como prática social significativa.",
+    "A escrita aparece nas brincadeiras de {N} com naturalidade e função: {ele/ela} escreve para comunicar, demonstrando letramento emergente funcional."
+  ],
+  "Demonstra consciência fonológica inicial (rimas, sons iniciais)": [
+    "{N} demonstra consciência fonológica inicial ao brincar com rimas e identificar sons iniciais, revelando sensibilidade sonora e base para a alfabetização.",
+    "Rimas e sons iniciais são objetos de atenção e brincadeira para {N}: {ele/ela} os percebe e manipula com prazer, revelando consciência fonológica emergente."
+  ],
+  // COGNITIVO
+  "Classifica por múltiplos critérios (cor, forma, tamanho, função)": [
+    "{N} classifica objetos por múltiplos critérios com precisão e flexibilidade, revelando pensamento lógico-matemático em nível avançado para a faixa etária.",
+    "A classificação multidimensional de {N} revela sofisticação cognitiva: {ele/ela} organiza por cor, forma, tamanho e função com desenvoltura."
+  ],
+  "Ordena séries (maior→menor, mais claro→mais escuro, maior→menor quantidade)": [
+    "{N} ordena séries com precisão e critério em múltiplas dimensões, revelando desenvolvimento do pensamento sequencial e da noção de gradação.",
+    "A ordenação de séries por diferentes critérios é uma habilidade consolidada em {N}, demonstrando pensamento lógico e matemático integrados."
+  ],
+  "Compara quantidades com justificativa (esse tem mais porque…)": [
+    "{N} compara quantidades e justifica {suas} comparações — \"esse tem mais porque…\" — revelando raciocínio matemático e domínio da linguagem argumentativa.",
+    "A justificativa nas comparações de {N} revela pensamento lógico-matemático sofisticado: {ele/ela} não apenas compara, mas explica com coerência."
+  ],
+  "Identifica formas geométricas diversas e descreve características": [
+    "{N} identifica formas geométricas diversas e descreve {suas} características, revelando percepção visual sofisticada e vocabulário matemático em expansão.",
+    "As formas geométricas são objetos de análise para {N}: {ele/ela} as identifica e descreve com precisão, revelando pensamento espacial e matemático."
+  ],
+  "Reconhece e cria padrões (AB, ABC, AAB)": [
+    "{N} reconhece e cria padrões variados — AB, ABC, AAB — com invenção e critério, revelando pensamento lógico, criatividade e planejamento integrados.",
+    "A criação de padrões revela em {N} raciocínio lógico e expressão criativa: {ele/ela} inventa e sustenta sequências com consistência e prazer."
+  ],
+  "Resolve problemas concretos com raciocínio próprio": [
+    "{N} resolve problemas concretos com raciocínio próprio e criativo, revelando pensamento autônomo, confiança intelectual e capacidade resolutiva.",
+    "Diante de desafios concretos, {N} mobiliza {seu/sua} próprio raciocínio com iniciativa e eficácia, demonstrando pensamento matemático e resolutivo."
+  ],
+  "Observa relações de causa e efeito em experimentos e situações": [
+    "{N} observa e articula relações de causa e efeito em experimentos e situações cotidianas, revelando pensamento científico e raciocínio lógico consolidados.",
+    "O pensamento causal de {N} é claro e articulado: {ele/ela} conecta causas e consequências com precisão, revelando raciocínio científico em expansão."
+  ],
+  "Faz antecipações (acho que vai acontecer…)": [
+    "{N} faz antecipações com frequência e pertinência — \"acho que vai acontecer…\" — revelando pensamento preditivo, hipotético e científico em desenvolvimento.",
+    "A capacidade de {N} de antecipar é expressiva: {ele/ela} formula previsões com lógica e as verifica com atenção, demonstrando pensamento científico."
+  ],
+  // CURIOSIDADE INVESTIGATIVA
+  "Faz perguntas sobre fenômenos naturais, corpo, objetos e funcionamento": [
+    "{N} faz perguntas sobre fenômenos naturais, o corpo, objetos e funcionamento com frequência e profundidade, revelando curiosidade científica genuína.",
+    "As perguntas de {N} sobre o mundo revelam sede intelectual autêntica: {ele/ela} interroga com precisão e espera respostas que satisfaçam {sua} investigação."
+  ],
+  "Observa, compara e relata descobertas": [
+    "{N} observa, compara e relata {suas} descobertas com riqueza e organização, revelando método científico emergente e pensamento analítico em desenvolvimento.",
+    "A investigação de {N} se traduz em relato: {ele/ela} descreve o que percebe com precisão e linguagem, demonstrando pensamento científico e comunicação eficaz."
+  ],
+  "Testa hipóteses e verifica resultados": [
+    "{N} testa hipóteses e verifica resultados com método e satisfação genuína, revelando pensamento experimental e aprendizagem ativa pela experiência.",
+    "Testar e verificar é o modo de {N} conhecer: {ele/ela} formula, experimenta e avalia com rigor e prazer, demonstrando cientista em formação."
+  ],
+  "Demonstra interesse por natureza, animais, clima e transformações": [
+    "{N} demonstra interesse genuíno por natureza, animais, clima e transformações, revelando sensibilidade ecológica e curiosidade científica em plena expansão.",
+    "O mundo natural é objeto de fascínio para {N}: {ele/ela} observa, questiona e se encanta com animais, clima e transformações da natureza."
+  ],
+  "Participa de investigações e projetos com envolvimento": [
+    "{N} participa de investigações e projetos com envolvimento genuíno e contribuição ativa, revelando curiosidade intelectual e aprendizagem colaborativa.",
+    "As investigações coletivas são espaços de florescimento para {N}: {ele/ela} participa, questiona e contribui com entusiasmo e comprometimento."
+  ],
+  "Conecta informações novas com conhecimentos prévios": [
+    "{N} conecta informações novas com conhecimentos prévios com naturalidade, revelando aprendizagem significativa e pensamento relacional sofisticado.",
+    "A capacidade de {N} de relacionar o novo ao já conhecido revela aprendizagem ativa e pensamento integrador — base de uma cognição robusta."
+  ],
+  // BRINCADEIRA SIMBÓLICA
+  "Cria narrativas longas e elaboradas durante a brincadeira": [
+    "{N} cria narrativas longas e elaboradas durante a brincadeira, revelando pensamento simbólico sofisticado, linguagem narrativa e imaginação fértil.",
+    "As histórias que {N} constrói no brincar são ricas e sustentadas: personagens, enredos e resoluções emergem com criatividade e coerência."
+  ],
+  "Assume papéis sociais variados com consistência": [
+    "{N} assume papéis sociais variados com consistência e detalhes, revelando pensamento simbólico maduro, observação social aguçada e expressividade.",
+    "O faz-de-conta de {N} é habitado por papéis elaborados e consistentes: {ele/ela} encarna personagens com profundidade e convicção."
+  ],
+  "Utiliza diálogos complexos nos enredos": [
+    "{N} utiliza diálogos complexos nos enredos do faz-de-conta, revelando domínio linguístico, teoria da mente e sofisticação simbólica integrados.",
+    "Os diálogos de {N} nos enredos são elaborados e pertinentes: {ele/ela} fala por múltiplos personagens com vozes e intenções distintas."
+  ],
+  "Integra múltiplos colegas em histórias colaborativas": [
+    "{N} integra múltiplos colegas em histórias colaborativas com habilidade e generosidade, revelando maturidade social, simbólica e linguística.",
+    "A inclusão dos colegas nas histórias é uma conquista de {N}: {ele/ela} coordena enredos coletivos com disposição e criatividade."
+  ],
+  "Representa cenas do cotidiano, da imaginação e de histórias conhecidas": [
+    "{N} representa cenas do cotidiano, da imaginação e de histórias conhecidas com riqueza e fluidez, revelando memória cultural, criatividade e simbolismo.",
+    "As encenações de {N} transitam entre o real, o imaginado e o narrativo com desenvoltura, revelando riqueza simbólica e cultural."
+  ],
+  "Planeja a estrutura do brincar antes de começar": [
+    "{N} planeja a estrutura do brincar antes de iniciar, revelando pensamento prospectivo, organização narrativa e maturidade executiva aplicada ao simbolismo.",
+    "Planejar antes de brincar é uma marca de {N}: {ele/ela} define papéis, enredos e regras antes de começar, demonstrando pensamento executivo e simbólico."
+  ],
+  "Usa objetos substitutos com criatividade e intenção": [
+    "{N} usa objetos substitutos com criatividade e intenção declarada, revelando pensamento simbólico maduro e imaginação fértil em plena expressão.",
+    "A transformação de objetos pela imaginação é marca de {N}: {ele/ela} cria significados com facilidade e inventividade, demonstrando sofisticação simbólica."
+  ],
+  // MOTOR – Global
+  "Coordena movimentos com fluidez": [
+    "{N} coordena movimentos com fluidez e precisão, revelando integração sensório-motora sofisticada e domínio expressivo do corpo no espaço.",
+    "A coordenação motora de {N} é fluida e eficiente: {ele/ela} move o corpo com controle e naturalidade, demonstrando maturidade motora global."
+  ],
+  "Alterna pés ao correr, saltar e subir escadas": [
+    "{N} alterna pés ao correr, saltar e subir escadas com segurança e desenvoltura, revelando coordenação bilateral consolidada e maturidade motora.",
+    "A alternância de pés nas diferentes atividades motoras é uma conquista consolidada em {N}, demonstrando coordenação bilateral e controle corporal."
+  ],
+  "Salta distâncias com precisão e impulso": [
+    "{N} salta distâncias com precisão e impulso controlado, revelando força, coordenação e planejamento motor em nível avançado.",
+    "O salto de {N} é preciso e potente: {ele/ela} calcula a distância e executa com controle, demonstrando desenvolvimento motor global expressivo."
+  ],
+  "Mantém equilíbrio em bases estreitas": [
+    "{N} mantém equilíbrio em bases estreitas com controle postural e concentração, revelando propriocepção refinada e domínio corporal sofisticado.",
+    "O equilíbrio de {N} em situações desafiadoras revela controle postural avançado e percepção corporal em plena consolidação."
+  ],
+  "Arremessa e recebe bolas com direção e força ajustadas": [
+    "{N} arremessa e recebe bolas com direção e força ajustadas, revelando integração visomotora sofisticada e planejamento motor preciso.",
+    "A habilidade de {N} com bolas é expressiva: arremessos e recepções são realizados com precisão, intenção e força ajustada."
+  ],
+  "Realiza movimentos rítmicos e sequências motoras simples": [
+    "{N} realiza movimentos rítmicos e sequências motoras com fluidez e prazer, revelando integração sensório-motora, musicalidade e expressividade corporal.",
+    "Ritmo e sequências motoras são linguagens que {N} domina com alegria e precisão, revelando coordenação e expressividade integradas."
+  ],
+  // MOTOR – Fino
+  "Usa lápis com controle refinado": [
+    "{N} usa o lápis com controle refinado e gesto intencional, revelando amadurecimento expressivo da motricidade fina e domínio do instrumento gráfico.",
+    "A preensão e o controle do lápis de {N} estão refinados: {ele/ela} escreve e desenha com precisão, demonstrando motricidade fina em nível avançado."
+  ],
+  "Desenha figuras humanas com múltiplos detalhes": [
+    "{N} desenha figuras humanas com múltiplos detalhes — rosto, corpo, membros e expressões — revelando pensamento simbólico, observação e expressão visual.",
+    "As figuras humanas de {N} são ricas em detalhes e intenção, demonstrando representação simbólica sofisticada e desenvolvimento gráfico expressivo."
+  ],
+  "Recorta curvas e formas complexas": [
+    "{N} recorta curvas e formas complexas com precisão, revelando coordenação bimanual avançada e controle motor fino em nível expressivo.",
+    "O uso da tesoura de {N} atinge formas complexas com controle e precisão, demonstrando desenvolvimento motor fino significativo."
+  ],
+  "Faz dobraduras simples": [
+    "{N} realiza dobraduras simples com atenção e precisão, revelando coordenação bimanual, compreensão espacial e motricidade fina em consolidação.",
+    "As dobraduras de {N} são realizadas com cuidado e fidelidade, demonstrando motricidade fina e atenção ao detalhe em desenvolvimento."
+  ],
+  "Monta construções elaboradas com blocos": [
+    "{N} monta construções elaboradas com blocos, revelando planejamento espacial sofisticado, motricidade fina e pensamento tridimensional.",
+    "As construções de {N} com blocos ganham em elaboração e planejamento: {ele/ela} projeta estruturas complexas, demonstrando cognição espacial avançada."
+  ],
+  "Realiza rasgagens com precisão": [
+    "{N} realiza rasgagens com precisão e controle, revelando desenvolvimento da motricidade fina e da coordenação das mãos.",
+    "Rasgar com precisão é uma habilidade que {N} exerce com controle e destreza, demonstrando motricidade fina em consolidação."
+  ],
+  "Escreve marcas gráficas intencionais e organizadas": [
+    "{N} escreve marcas gráficas intencionais e organizadas, revelando hipótese de escrita em desenvolvimento e compreensão da função representacional da escrita.",
+    "As marcas gráficas de {N} são intencionais e organizadas: {ele/ela} escreve com propósito, demonstrando letramento emergente e motricidade fina articulados."
+  ],
+  // EXPRESSÃO ARTÍSTICA
+  "Representa cenas conhecidas com riqueza de detalhes": [
+    "{N} representa cenas conhecidas com riqueza de detalhes e narrativa visual, revelando pensamento simbólico maduro e expressão artística sofisticada.",
+    "As produções de {N} contam histórias: cenas reconhecíveis com detalhes e intenção revelam pensamento narrativo e expressão visual em maturação."
+  ],
+  "Mistura cores com intenção estética": [
+    "{N} mistura cores com intenção estética e sensibilidade, revelando desenvolvimento do olhar artístico e pensamento criativo integrados.",
+    "A mistura de cores é uma exploração estética de {N}: {ele/ela} combina com critério e prazer, demonstrando sensibilidade artística em expansão."
+  ],
+  "Cria composições com múltiplos elementos": [
+    "{N} cria composições com múltiplos elementos organizados com intenção, revelando planejamento visual, criatividade e expressão artística sofisticada.",
+    "As composições de {N} são elaboradas e intencionais: {ele/ela} organiza elementos com critério estético, demonstrando pensamento artístico avançado."
+  ],
+  "Usa música e ritmo com segurança": [
+    "{N} usa música e ritmo com segurança e prazer, revelando senso rítmico consolidado, memória musical e expressividade corporal integrados.",
+    "Música e ritmo são linguagens que {N} domina com confiança: {ele/ela} se expressa com precisão e alegria, revelando musicalidade em consolidação."
+  ],
+  "Inventa rimas e melodias": [
+    "{N} inventa rimas e melodias com criatividade e naturalidade, revelando sensibilidade estética, consciência fonológica e expressão artística integrados.",
+    "A criação de rimas e melodias é espontânea e prazerosa em {N}: {ele/ela} inventa com desenvoltura, revelando artista e linguista em plena expressão."
+  ],
+  "Participa de dramatizações com envolvimento": [
+    "{N} participa de dramatizações com envolvimento genuíno e riqueza expressiva, revelando imaginação fértil, linguagem expressiva e maturidade social.",
+    "O teatro e a dramatização são espaços de florescimento para {N}: {ele/ela} encena com prazer, expressividade e criatividade."
+  ],
+  "Expõe e comenta suas produções com clareza": [
+    "{N} expõe e comenta {suas} produções com clareza e convicção, revelando autoconsciência artística, linguagem expressiva e autoestima consolidada.",
+    "A exposição das próprias produções é um momento de protagonismo para {N}: {ele/ela} apresenta e comenta com segurança e orgulho."
+  ],
+  "Mostra apreciação estética ao observar obras, cores e materiais": [
+    "{N} demonstra apreciação estética ao observar obras, cores e materiais, revelando sensibilidade artística, atenção ao detalhe e pensamento crítico.",
+    "A apreciação estética de {N} é genuína e expressiva: {ele/ela} se detém diante de obras e materiais, comentando com sensibilidade e insight."
+  ],
+  // TEMPORAL/ESPACIAL
+  "Usa adequadamente ontem/hoje/amanhã": [
+    "{N} usa os conceitos de ontem, hoje e amanhã com adequação crescente nas situações cotidianas, revelando noção temporal consolidada.",
+    "O vocabulário temporal de {N} está consolidado: {ele/ela} usa ontem, hoje e amanhã com precisão nas conversas e narrativas."
+  ],
+  "Compreende sequência de rotinas e acontecimentos": [
+    "{N} compreende e antecipa a sequência de rotinas e acontecimentos com clareza, revelando memória procedimental e raciocínio temporal consolidados.",
+    "A sequência de acontecimentos é compreendida por {N} com naturalidade e precisão: {ele/ela} antecipa e se organiza com autonomia."
+  ],
+  "Relaciona eventos a períodos (manhã, tarde, noite)": [
+    "{N} relaciona eventos às partes do dia com precisão, revelando organização temporal consolidada e noção de duração e período.",
+    "A estrutura temporal do dia é dominada por {N}: {ele/ela} relaciona eventos à manhã, tarde e noite com naturalidade e precisão."
+  ],
+  "Reconhece passagem do tempo em projetos e eventos": [
+    "{N} reconhece a passagem do tempo em projetos e eventos, revelando desenvolvimento da noção de tempo como processo contínuo e mensurável.",
+    "A noção de passagem do tempo emerge em {N} com clareza: {ele/ela} percebe o antes e o depois de projetos e eventos com compreensão crescente."
+  ],
+  "Usa expressões como no verão passado, no próximo, ontem à noite": [
+    "{N} usa expressões temporais elaboradas — \"no verão passado\", \"no próximo\", \"ontem à noite\" — revelando sofisticação temporal e vocabulário em expansão.",
+    "O uso de expressões temporais elaboradas por {N} revela noção de tempo sofisticada: {ele/ela} situa eventos no passado e futuro com precisão crescente."
+  ],
+  "Descreve caminhos e localizações": [
+    "{N} descreve caminhos e localizações com clareza e organização, revelando representação espacial interna bem estruturada e linguagem espacial consolidada.",
+    "A descrição de caminhos por {N} revela cognição espacial e linguagem integradas em nível avançado: {ele/ela} narra trajetos com precisão."
+  ],
+  "Usa termos espaciais com precisão": [
+    "{N} usa termos espaciais com precisão e naturalidade, aplicando-os com segurança nas situações do cotidiano e nas produções.",
+    "As noções espaciais de {N} estão consolidadas: {ele/ela} usa termos de posição com correção e fluência em diferentes contextos."
+  ],
+  "Organiza materiais no espaço com planejamento": [
+    "{N} organiza materiais no espaço com planejamento e critério, revelando pensamento espacial, autonomia e senso de organização em nível avançado.",
+    "A organização planejada do espaço é uma habilidade de {N}: {ele/ela} posiciona materiais com propósito e atenção, revelando pensamento espacial sofisticado."
+  ],
+  "Representa lugares já conhecidos nos desenhos": [
+    "{N} representa lugares conhecidos nos desenhos com detalhes e organização espacial, revelando mapa mental consolidado e expressão visual sofisticada.",
+    "Os desenhos de lugares de {N} revelam representação espacial interna: {ele/ela} representa com detalhes reconhecíveis e organização espacial."
+  ],
+  // AUTONOMIA – Pessoal
+  "Veste-se e despe-se com independência": [
+    "{N} veste-se e despe-se com independência, revelando autonomia plena nos cuidados pessoais e motricidade fina funcional consolidada.",
+    "Vestir-se e despir-se {sozinho/sozinha} é uma conquista consolidada de {N}: {ele/ela} realiza com habilidade e independência."
+  ],
+  "Identifica frente e costas das roupas": [
+    "{N} identifica frente e costas das roupas com segurança, revelando orientação espacial aplicada ao autocuidado e autonomia consolidada.",
+    "A identificação de frente e costas da roupa é automática em {N}, revelando orientação espacial e autonomia nos cuidados pessoais."
+  ],
+  "Cuida de seus pertences": [
+    "{N} cuida de {seus/suas} pertences com responsabilidade e organização, demonstrando senso de pertencimento e autonomia consolidados.",
+    "O cuidado de {N} com {seus/suas} pertences é consistente e autônomo, revelando responsabilidade e senso de identidade e pertença."
+  ],
+  "Busca o banheiro e realiza higiene com mínima ajuda": [
+    "{N} busca o banheiro e realiza a higiene com mínima ajuda, revelando autonomia corporal consolidada e consciência do autocuidado.",
+    "A autonomia de {N} no banheiro está consolidada: {ele/ela} busca, realiza e cuida com mínima necessidade de supervisão."
+  ],
+  "Organiza sua mochila com apoio verbal leve": [
+    "Com apoio verbal leve, {N} organiza {sua} mochila com cuidado e responsabilidade, revelando autonomia em expansão e senso de organização.",
+    "{N} organiza {sua} mochila quando orientado{o/a} verbalmente, demonstrando responsabilidade e autonomia na gestão dos próprios pertences."
+  ],
+  // AUTONOMIA – Alimentação
+  "Alimenta-se com autonomia plena": [
+    "{N} alimenta-se com autonomia plena, revelando independência alimentar e motricidade fina funcional plenamente consolidadas.",
+    "A autonomia de {N} à mesa é completa: {ele/ela} realiza as refeições com independência, controle e naturalidade."
+  ],
+  "Serve-se (quando permitido)": [
+    "Quando permitido, {N} serve-se com habilidade e segurança, revelando autonomia, coordenação motora e senso de responsabilidade.",
+    "{N} serve-se com confiança e precisão nas situações em que é permitido, demonstrando autonomia alimentar em nível avançado."
+  ],
+  "Mantém postura adequada durante a refeição": [
+    "{N} mantém postura adequada durante as refeições, revelando regulação corporal, autocontrole e consciência social em desenvolvimento.",
+    "A postura de {N} à mesa é adequada e consistente, revelando autocontrole, consciência corporal e maturidade social."
+  ],
+  "Experimenta novos alimentos com maior abertura": [
+    "{N} experimenta novos alimentos com abertura crescente, revelando disposição para ampliar o repertório alimentar e confiança no ambiente escolar.",
+    "A abertura de {N} para novos alimentos avança: {ele/ela} experimenta com mais disposição, demonstrando confiança e curiosidade gustativa."
+  ],
+  // AUTONOMIA – Higiene
+  "Lava mãos, rosto e dentes com autonomia crescente": [
+    "{N} lava mãos, rosto e dentes com autonomia crescente, revelando internalização dos hábitos de higiene e desenvolvimento do autocuidado.",
+    "A higiene pessoal de {N} é realizada com autonomia e consistência, revelando que os hábitos de cuidado estão plenamente incorporados à rotina."
+  ],
+  "Realiza higiene íntima com supervisão leve": [
+    "Com supervisão leve, {N} realiza a higiene íntima com participação ativa, revelando desenvolvimento da autonomia e consciência do autocuidado.",
+    "{N} realiza a higiene íntima com supervisão mínima e disposição, etapa acompanhada com respeito e naturalidade pela equipe."
+  ],
+  "Banha-se com independência parcial": [
+    "{N} banha-se com crescente independência, revelando desenvolvimento da autonomia nos cuidados pessoais e da consciência do próprio corpo.",
+    "O banho de {N} acontece com participação ativa e independência parcial, demonstrando autonomia em expansão e autocuidado em consolidação."
+  ],
+  // AUTONOMIA – Sono
+  "Relata sonhos com clareza": [
+    "{N} relata sonhos com clareza e riqueza de detalhes, revelando desenvolvimento da narrativa, da memória e da consciência dos estados internos.",
+    "O relato de sonhos de {N} é expressivo e organizado: {ele/ela} narra com detalhes e interesse, demonstrando desenvolvimento da consciência e da narrativa."
+  ],
+  "Adota rituais pessoais de relaxamento": [
+    "{N} adota rituais pessoais de relaxamento, revelando desenvolvimento da autorregulação e da consciência dos próprios estados internos.",
+    "Os rituais de relaxamento de {N} são recursos próprios e eficazes, revelando autorregulação e consciência de si em desenvolvimento."
+  ],
+  "Demonstra consciência de cansaço e necessidade de repouso": [
+    "{N} demonstra consciência de {seu/sua} próprio cansaço e necessidade de repouso, revelando interoceptividade e autoconsciência corporal em desenvolvimento.",
+    "A consciência de {N} sobre {seu/sua} próprio cansaço é uma conquista: {ele/ela} percebe e comunica a necessidade de descanso com naturalidade."
+  ],
+  // CONDUTA ESCOLAR
+  "Participa das atividades com intencionalidade": [
+    "{N} participa das atividades com intencionalidade e foco, revelando maturidade atencional, engajamento genuíno e interesse pela aprendizagem.",
+    "A presença de {N} nas atividades é marcada por intenção e qualidade de engajamento: {ele/ela} se lança nas propostas com propósito e entusiasmo."
+  ],
+  "Contribui nas rodas e debates": [
+    "{N} contribui nas rodas e debates com comentários pertinentes e escuta ativa, revelando maturidade dialógica, social e linguística integradas.",
+    "As rodas e debates são espaços de protagonismo para {N}: {ele/ela} contribui com qualidade, escuta e responde com pertinência e presença."
+  ],
+  "Segue regras e combinados do grupo": [
+    "{N} segue as regras e os combinados do grupo com consistência e convicção, revelando desenvolvimento moral, senso de pertencimento e responsabilidade coletiva.",
+    "As regras do grupo são internalizadas por {N} com disposição: {ele/ela} as cumpre com consistência, revelando consciência coletiva consolidada."
+  ],
+  "Organiza seus materiais e espaço de trabalho": [
+    "{N} organiza {seus/suas} materiais e espaço de trabalho com autonomia e critério, revelando responsabilidade, planejamento e senso de ordem.",
+    "A organização do espaço e dos materiais é uma prática autônoma de {N}, demonstrando responsabilidade e senso de organização consolidados."
+  ],
+  "Demonstra responsabilidade nas propostas": [
+    "{N} demonstra responsabilidade nas propostas com comprometimento e persistência, revelando desenvolvimento do senso de responsabilidade e da autonomia.",
+    "A responsabilidade de {N} nas propostas é consistente: {ele/ela} assume e cumpre com comprometimento, revelando maturidade e senso de dever."
+  ],
+  "Interage positivamente com colegas e professores": [
+    "{N} interage positivamente com colegas e professores, demonstrando habilidades sociais, empatia e prazer genuíno na convivência.",
+    "As interações de {N} com o grupo são marcadas por positividade e reciprocidade: {ele/ela} cuida dos vínculos com atenção e afeto."
+  ],
+  "Mostra curiosidade e iniciativa em projetos": [
+    "{N} demonstra curiosidade e iniciativa nos projetos, partindo por conta própria para investigar e contribuir — postura que revela autonomia intelectual.",
+    "A curiosidade e a iniciativa de {N} nos projetos são consistentes e expressivas: {ele/ela} se engaja com entusiasmo e contribuição genuína."
+  ]
+};
+
+const ABERTURAS = [
+  "{O/A} {N} chegou ao {P} trazendo consigo {sua} singularidade e {seu/sua} ritmo {proprio/propria} de aprender. Ao longo deste período, foi possível observar com cuidado {seu/sua} desenvolvimento em diferentes dimensões, registradas a seguir a partir das Trilhas do Desenvolvimento.",
+  "O {P} foi um tempo de muitas descobertas para {N}. A partir da observação atenta do cotidiano escolar, foi possível identificar avanços significativos em {seu/sua} desenvolvimento, que este relato busca narrar com fidelidade e afeto.",
+  "Ao longo do {P}, {N} habitou o espaço escolar com curiosidade, afeto e um jeito {proprio/propria} de estar no mundo. Este relato narrativo reúne as observações da professora sobre {seu/sua} desenvolvimento neste período.",
+  "Este relato tem como intenção narrar o desenvolvimento de {N} ao longo do {P}, a partir da observação cuidadosa da professora nas situações do cotidiano escolar. Cada anotação aqui reunida é um retrato desse momento único."
+];
+
+const ENCERRAMENTOS = [
+  "{N} está em pleno florescimento — cada dia traz novas possibilidades, e acompanhar esse processo é um privilégio. A escola segue ao {seu/sua} lado, atenta e acolhedora, celebrando cada pequena grande conquista.",
+  "Este período foi marcado por descobertas que pertencem apenas a {N}. Que o próximo ciclo traga ainda mais oportunidades de crescimento, exploração e encontro — sempre no tempo e no ritmo desta criança singular.",
+  "Acompanhar {N} neste período foi uma experiência enriquecedora. {Ele/Ela} segue {seu/sua} caminho com inteireza, e a escola está comprometida em ser um espaço de escuta, cuidado e aprendizagem genuína.",
+  "{N} é {um/uma} criança que nos surpreende a cada dia. Este relato é apenas um retrato parcial de quem {ele/ela} é — muito mais há de vir, e a escola estará presente para acolher e celebrar cada nova conquista."
+];
+
+const TOTAL = DOMINIOS.reduce((a,d)=>a+d.grupos.reduce((b,g)=>b+g.itens.length,0),0);
+const marcados = {};
+
+function construir() {
+  const tabsRow = document.getElementById('tabs-row');
+  const wrap = document.getElementById('domains-wrap');
+  document.getElementById('plbl').textContent = '0 / ' + TOTAL;
+  DOMINIOS.forEach((dom, di) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (di===0?' ativa':'');
+    btn.textContent = dom.label;
+    btn.onclick = () => trocarAba(di);
+    tabsRow.appendChild(btn);
+    const sec = document.createElement('div');
+    sec.className = 'domain-section' + (di===0?' vis':'');
+    sec.id = 'sec-'+di;
+    let html = `<div class="domain-titulo">${di+1}. ${dom.label}</div>`;
+    dom.grupos.forEach((g, gi) => {
+      html += `<div class="sub-lbl">${g.sub}</div>`;
+      g.itens.forEach((item, ii) => {
+        const id = `ck_${di}_${gi}_${ii}`;
+        marcados[id] = false;
+        html += `<div class="item-row" id="row_${id}" onclick="alternar(event,'${id}')"><input type="checkbox" id="${id}"><label for="${id}">${item}</label></div>`;
+      });
+    });
+    sec.innerHTML = html;
+    wrap.appendChild(sec);
+  });
+}
+
+function trocarAba(di) {
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('ativa',i===di));
+  document.querySelectorAll('.domain-section').forEach((s,i)=>s.classList.toggle('vis',i===di));
+}
+
+function alternar(e, id) {
+  const el = document.getElementById(id);
+  if (e.target !== el) el.checked = !el.checked;
+  marcados[id] = el.checked;
+  document.getElementById('row_'+id).classList.toggle('marcado', el.checked);
+  const n = Object.values(marcados).filter(Boolean).length;
+  document.getElementById('pfill').style.width = Math.round(n/TOTAL*100)+'%';
+  document.getElementById('plbl').textContent = n+' / '+TOTAL;
+}
+
+function pick(arr, seed) { return arr[seed % arr.length]; }
+
+function gerarRelato() {
+  const nomeRaw = document.getElementById('f-nome').value.trim();
+  const nome = nomeRaw || (SEXO==='M' ? 'o aluno' : 'a aluna');
+  const periodo = document.getElementById('f-periodo').value;
+  const obs = document.getElementById('obs').value.trim();
+
+  const selecionados = [];
+  DOMINIOS.forEach((d,di) => d.grupos.forEach((g,gi) => g.itens.forEach((item,ii) => {
+    if (marcados[`ck_${di}_${gi}_${ii}`]) selecionados.push(item);
+  })));
+
+  if (!selecionados.length && !obs) {
+    const e = document.getElementById('erro-box');
+    e.textContent = 'Selecione ao menos um indicador ou adicione observações complementares.';
+    e.style.display = 'block'; return;
+  }
+  document.getElementById('erro-box').style.display = 'none';
+
+  const porDominio = DOMINIOS.map((d,di) => {
+    const itens = [];
+    d.grupos.forEach((g,gi) => g.itens.forEach((item,ii) => {
+      if (marcados[`ck_${di}_${gi}_${ii}`]) itens.push(item);
+    }));
+    return { label: d.label, itens };
+  }).filter(d => d.itens.length > 0);
+
+  let seed = 0;
+  for (let c of nome) seed += c.charCodeAt(0);
+  const N = nome.split(' ')[0];
+
+  let partes = [];
+  const abertura = pick(ABERTURAS, seed).replace(/{N}/g, N).replace(/{P}/g, periodo);
+  partes.push(aplicarGenero(abertura, SEXO));
+
+  const blocos = [
+    { dominios: ["Socioemocional", "Conduta Escolar"] },
+    { dominios: ["Funções Executivas", "Cognitivo", "Curiosidade Investigativa"] },
+    { dominios: ["Linguagem", "Alfabetização Emergente"] },
+    { dominios: ["Motor", "Expressão Artística", "Brincadeira Simbólica"] },
+    { dominios: ["Temporal/Espacial", "Autonomia"] }
+  ];
+
+  blocos.forEach((bloco, bi) => {
+    const frases = [];
+    bloco.dominios.forEach(nomeDom => {
+      const dom = porDominio.find(d => d.label === nomeDom);
+      if (!dom) return;
+      dom.itens.forEach((item, ii) => {
+        const opcoes = FRASES[item];
+        if (opcoes) {
+          const frase = pick(opcoes, seed + bi + ii).replace(/{N}/g, N);
+          frases.push(aplicarGenero(frase, SEXO));
+        }
+      });
+    });
+    if (frases.length > 0) partes.push(frases.join(' '));
+  });
+
+  // Observações complementares: integradas ao último parágrafo temático
+  if (obs) {
+    const obsFormatada = obs.charAt(0).toLowerCase() + obs.slice(1);
+    const obsFinal = /[.!?]$/.test(obsFormatada.trim()) ? obsFormatada.trim() : obsFormatada.trim() + '.';
+    const conectores = [
+      ' Vale acrescentar que ',
+      ' A professora destaca ainda que ',
+      ' Completando este retrato, ',
+      ' Além disso, '
+    ];
+    const conector = conectores[seed % conectores.length];
+    // Funde ao último parágrafo temático (o último item de partes antes do encerramento)
+    if (partes.length > 1) {
+      partes[partes.length - 1] += conector + obsFinal;
+    } else {
+      partes.push(obsFinal);
+    }
+  }
+
+  const enc = pick(ENCERRAMENTOS, seed + 1).replace(/{N}/g, N);
+  partes.push(aplicarGenero(enc, SEXO));
+
+  document.getElementById('relato-txt').textContent = partes.join('\n\n');
+  const box = document.getElementById('relato-box');
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copiar() {
+  const t = document.getElementById('relato-txt').textContent;
+  const b = document.getElementById('btn-cp');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(() => feedback(b)).catch(() => fallback(t, b));
+  } else { fallback(t, b); }
+}
+function feedback(btn) {
+  btn.classList.add('ok'); btn.textContent = '✓ Copiado!';
+  setTimeout(() => { btn.classList.remove('ok'); btn.textContent = 'Copiar texto'; }, 2000);
+}
+function fallback(texto, btn) {
+  const ta = document.createElement('textarea');
+  ta.value = texto; ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try { document.execCommand('copy'); feedback(btn); } catch(e) { alert('Selecione o texto manualmente e copie com Ctrl+C.'); }
+  document.body.removeChild(ta);
+}
+
+function limpar() {
+  if (!confirm('Limpar todos os indicadores marcados?')) return;
+  Object.keys(marcados).forEach(id => {
+    marcados[id] = false;
+    const el = document.getElementById(id); if (el) el.checked = false;
+    const row = document.getElementById('row_'+id); if (row) row.classList.remove('marcado');
+  });
+  document.getElementById('obs').value = '';
+  document.getElementById('relato-box').style.display = 'none';
+  document.getElementById('relato-txt').textContent = '';
+  document.getElementById('pfill').style.width = '0%';
+  document.getElementById('plbl').textContent = '0 / '+TOTAL;
+  document.getElementById('erro-box').style.display = 'none';
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', construir);
+} else {
+  construir();
+}
+</script>
+</body>
+</html>
